@@ -22,6 +22,8 @@
 		private var flash_item_group:Sprite;
 		private var flash_mask:Sprite;
 		private var item_width:Number = 120;
+		private var list_height:Number = 120;
+
 		private var item_padding:Number = 20;
 		private var flash_style:StyleSheet;
 		private var moreIndex:int = 5;
@@ -37,13 +39,14 @@
 			var lists:Array = t_lists.arr
 			create_item_list(lists)
 			flash_style = new StyleSheet()
-			flash_style.setStyle('.style', { color:'#ffffff', fontSize:'15', textAlign:'center', fontFamily :'微软雅黑'})
-			flash_style.setStyle('a', {color:'#3B8FE0', fontSize:'15', textDecoration:'underline', fontFamily :'微软雅黑'})
+			//flash_style.setStyle('.style', { color:'#ffffff', fontSize:'15', textAlign:'center', fontFamily :'微软雅黑'})
+			//flash_style.setStyle('a', {color:'#3B8FE0', fontSize:'15', textDecoration:'underline', fontFamily :'微软雅黑'})
 		}
 
-		public function setup(container:Sprite, t_w:Number=0, t_p:Number = 0):void {
+		public function setup(container:Sprite, t_w:Number=0, t_h:Number=0, t_p:Number = 0):void {
 			container.addChild(this)
 			item_width = t_w ? t_w : item_width
+			list_height = t_h ? t_h : list_height;
 			item_padding = t_p ? t_p : 20
 			y = 20
 		}
@@ -68,23 +71,25 @@
 			for( var i:int = 0; i < total; i++ ) {
 				var flash_item = new Sprite();
 				flash_item.addChild( create_pre_icon(i))
-				flash_item.addChild( create_item_text(lists[i].name, item_width - item_padding*2) );
-				flash_item.addChild( create_item_text(lists[i].mark, 65,item_width - item_padding*2 + 65) );
+				flash_item.addChild( create_item_text(lists[i].name, 120) );
+				flash_item.addChild( create_item_text(lists[i].mark, 65, 165) );
 				//flash_item.addChildAt( create_item_bg( flash_item.height, i ), 0 );
 				flash_item.y = item_height;
 				item_height += flash_item.height + item_spacing;
 				flash_item_group.addChild( flash_item );
 			}
 			flash_mask.graphics.beginFill(0xff0000);
-			flash_mask.graphics.drawRect(0,0,240,320);
+			flash_mask.graphics.drawRect(0,0,item_width,list_height);
 			flash_mask.graphics.endFill();
 			addChild(flash_mask);
 			addChild(flash_item_group);
 			addChild(flash_sb);
 
+			trace(flash_item_group.height)
+
 			flash_sb.x = flash_item_group.x +flash_item_group.width
 			flash_sb.height = flash_mask.height;
-			flash_sb.scrolling(flash_item_group, flash_mask, 0.40);	// ScrollBar Added
+			flash_sb.scrolling(flash_item_group, flash_mask, 0.80);	// ScrollBar Added
 		}
 
 
@@ -127,21 +132,27 @@
 				bg.graphics.drawRoundRect(0,0, (rect.width)* tx.text.length + 5, rect.height, 1,1);
 				bg.graphics.endFill();
 				bg.y = 2.5
+				s.x = 5
 				s.addChildAt(bg, 0);			
 			}
 			return s;
 
 		}
-		private function create_item_text(item_desc:String, t_width:Number, padding_left:Number = 25 ):TextField {
+		private function create_item_text(item_desc:String, t_width:Number, padding_left:Number = 60, isMark:Boolean = false ):TextField {
 			var fm_text:TextField = new TextField();
 			fm_text.x = padding_left;
 			fm_text.y = 0;
 			fm_text.width = t_width;
-			fm_text.styleSheet = flash_style;
-			fm_text.htmlText = item_desc;
+			//fm_text.styleSheet = flash_style;
+			//fm_text.htmlText = item_desc;
+			fm_text.text = item_desc;
+			fm_text.textColor = 0xcfcfcf
 			fm_text.multiline = false;
 			fm_text.wordWrap = true;
 			fm_text.selectable = false;
+			if(isMark)
+			fm_text.autoSize = TextFieldAutoSize.RIGHT;
+			else
 			fm_text.autoSize = TextFieldAutoSize.LEFT;
 			return fm_text;
 		}
