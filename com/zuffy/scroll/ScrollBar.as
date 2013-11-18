@@ -38,7 +38,7 @@
 
 			sd=flash_scrollable_area.height-flash_scroller.height;
 			cd=flash_content.height-flash_content_area.height;
-			cr=cd/sd*1.05;
+			cr=cd/sd//*1.05;
 
 			drag_area=new Rectangle(0,0,0,sd);
 

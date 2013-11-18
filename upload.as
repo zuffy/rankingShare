@@ -25,6 +25,7 @@
 		private var file:FileReference;
 		private var _loader:Loader;
 		private var currentHolder:Sprite;
+		private var listHolder:Sprite;
 		private var uploadUrl:String = "http://zuffy.com/upload.php";
 
 		private const BOX_WIDTH:uint = 250;
@@ -38,7 +39,7 @@
 
 			var obj:Object = {}
 			var arr = [];
-			for (var i:int = 0; i< 200; i++){
+			for (var i:int = 0; i< 50; i++){
 				arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465'});
 			}
 			obj.arr = arr;
@@ -57,7 +58,7 @@
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadHandler); 
 			initUI();
-			DataList.instance.setup(currentHolder);
+			DataList.instance.setup(listHolder, 250, 315);
 		}
 
 		public function setData(dataList:Object,s:String):void {
@@ -95,6 +96,13 @@
 			addChild(btnCommit);
 
 			currentHolder = new Sprite();
+			listHolder = new Sprite();
+			var t_title:Title = new Title();
+			currentHolder.addChild(new BG());
+			currentHolder.addChild(t_title);
+			listHolder.x = 5;
+			listHolder.y = t_title.height - 20;
+			currentHolder.addChild(listHolder);
 			/*currentHolder.graphics.beginFill(0xaeaeae);
 			currentHolder.graphics.drawRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
 			currentHolder.graphics.endFill();
