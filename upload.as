@@ -38,11 +38,12 @@
 
 			var obj:Object = {}
 			var arr = [];
-			for (var i:int = 0; i< 20; i++){
-				arr.push({id:i, uid:'xxx'+i, rank:'111', url:'<a href="http://vip.xunlei.com"><img src="hhhttp://img.ucenter.xunlei.com/usrimg/501/50x50"></img></a><p>sadfsd</p>', des:'12315465'});
+			for (var i:int = 0; i< 200; i++){
+				arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465'});
 			}
 			obj.arr = arr;
-			setData(obj);
+			var str:String = '<p><ul><li>123</li><li>123</li><li>12aaa3</li></ul></p>'
+			setData(obj, str);
 		}
 		
 		private function init():void {
@@ -56,11 +57,11 @@
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadHandler); 
 			initUI();
-			DataList.instance.setup(currentHolder, BOX_WIDTH);
+			DataList.instance.setup(currentHolder);
 		}
 
-		public function setData(dataList:Object):void {
-			DataList.instance.setData(dataList);
+		public function setData(dataList:Object,s:String):void {
+			DataList.instance.setData(dataList,s);
 		}
 		
 		private function initUI():void{
@@ -94,11 +95,11 @@
 			addChild(btnCommit);
 
 			currentHolder = new Sprite();
-			currentHolder.graphics.beginFill(0xaeaeae);
+			/*currentHolder.graphics.beginFill(0xaeaeae);
 			currentHolder.graphics.drawRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
 			currentHolder.graphics.endFill();
 			currentHolder.x = 0;
-			currentHolder.y = 0;
+			currentHolder.y = 0;*/
 			addChild(currentHolder);
 		}
 
