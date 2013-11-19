@@ -27,16 +27,25 @@
 		private var currentHolder:Sprite;
 		private var listHolder:Sprite;
 		private var uploadUrl:String = "http://zuffy.com/upload.php";
+		private var picName:String = "null.png";
 
 		private const BOX_WIDTH:uint = 250;
-		private const BOX_HEIGHT:uint = 300;
-
+		private const BOX_HEIGHT:uint = 315;
+		private var sharComplete:Function
 
 		public function upload() {
 			Security.allowDomain("*");  
 			Security.allowInsecureDomain("*");
-			init();
+			if(stage){
+				init();
+			}
+			else {
+				addEventListener(Event.ADDED_TO_STAGE, init)
+			}
 
+
+			/**
+ 			// test
 			var obj:Object = {}
 			var arr = [];
 			for (var i:int = 0; i< 50; i++){
@@ -44,15 +53,21 @@
 			}
 			obj.arr = arr;
 			var str:String = '<p><ul><li>123</li><li>123</li><li>12aaa3</li></ul></p>'
+			
 			setData(obj, str);
+			*/
 		}
 		
-		private function init():void {
+		private function init(e:Event = null):void {
+			if(e){
+				removeEventListener(Event.ADDED_TO_STAGE, init)
+			}
 			var url:String = stage.loaderInfo.parameters.uploadUrl;
 			uploadUrl = url || uploadUrl;
 			if(ExternalInterface.available){
 				// ExternalInterface.call('function(){alert("'+url+'")}');
 			}
+			initJS();
 			initFileFilter();
 			file = createFile();
 			_loader = new Loader();
@@ -61,11 +76,45 @@
 			DataList.instance.setup(listHolder, 250, 315);
 		}
 
-		public function setData(dataList:Object,s:String):void {
+		public function setData(dataList:Object,s:String=''):void {
 			DataList.instance.setData(dataList,s);
 		}
-		
+
+		private function initJS():void{
+			if (ExternalInterface.available) {
+				ExternalInterface.addCallback('setParam', setParam);
+				ExternalInterface.addCallback('saveSnaptShoot', saveSnaptShoot);
+			}
+		}
+
+		private function setParam(obj:Object):void {
+			ExternalInterface.call('debug','in flash:'+obj.k)
+			var funcName = obj.snapUploadComplete
+			sharComplete = function __sharComplete(obj):void {
+				ExternalInterface.call('debug','in flash: com func '+ funcName)
+				ExternalInterface.call('' + funcName, obj);
+			}
+			uploadUrl = obj.uploadUrl
+			picName = obj.picName
+			setData(obj);
+		}
+
+		private function saveSnaptShoot():void{
+			onSave();
+		}
+
 		private function initUI():void{
+			currentHolder = new Sprite();
+			listHolder = new Sprite();
+			var t_title:Title = new Title();
+			currentHolder.addChild(new BG());
+			currentHolder.addChild(t_title);
+			listHolder.x = 5;
+			listHolder.y = t_title.height - 20;
+			currentHolder.addChild(listHolder);
+			addChild(currentHolder);
+
+/*		加测试按钮
 			var btnUploadFile:Sprite = new Sprite();
 			btnUploadFile.graphics.beginFill(0x999999);
 			btnUploadFile.graphics.drawRect(0,0,50,26);
@@ -77,7 +126,7 @@
 			btnCommit.graphics.endFill();
 			
 			btnUploadFile.x = 20;
-			btnUploadFile.y = 350;
+			btnUploadFile.y = currentHolder.height;
 			
 			btnCommit.x = btnUploadFile.x + btnUploadFile.width + 30;
 			btnCommit.y = btnUploadFile.y;
@@ -94,27 +143,13 @@
 			
 			addChild(btnUploadFile);
 			addChild(btnCommit);
-
-			currentHolder = new Sprite();
-			listHolder = new Sprite();
-			var t_title:Title = new Title();
-			currentHolder.addChild(new BG());
-			currentHolder.addChild(t_title);
-			listHolder.x = 5;
-			listHolder.y = t_title.height - 20;
-			currentHolder.addChild(listHolder);
-			/*currentHolder.graphics.beginFill(0xaeaeae);
-			currentHolder.graphics.drawRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
-			currentHolder.graphics.endFill();
-			currentHolder.x = 0;
-			currentHolder.y = 0;*/
-			addChild(currentHolder);
+*/
 		}
 
-		private function onSave(me:MouseEvent):void {
+		private function onSave(me:MouseEvent = null):void {
 			var photoModel:PhotoModel = PhotoModel.instance()
-			photoModel.photo(currentHolder, BOX_WIDTH, BOX_HEIGHT)
-			photoModel.uploadPic(uploadUrl)
+			photoModel.photo(currentHolder, BOX_WIDTH, 375)
+			photoModel.uploadPic(uploadUrl, picName, sharComplete)
 		}
 		
 

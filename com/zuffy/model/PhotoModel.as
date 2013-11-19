@@ -16,6 +16,7 @@
 	import flash.net.URLRequestHeader;
 	import flash.net.URLRequestMethod;
 	import flash.utils.ByteArray;
+	import flash.events.SecurityErrorEvent;
 
 	public class PhotoModel extends EventDispatcher {
 		private var p1:Sprite;
@@ -73,8 +74,9 @@
 			__upsave.addEventListener(ProgressEvent.PROGRESS, onSaveGress);
 			
 		}
-		
-		public function uploadPic(url:String):void {
+		private var _uploadRet:Function
+		public function uploadPic(url:String, picName:String, callback:Function):void {
+			_uploadRet = callback;
 			/**创建图片对应的字节流**/  
 			var pngStream:ByteArray = PNGEncoder.encode(picData_1);  
 			
@@ -82,7 +84,7 @@
 			var header:URLRequestHeader = new URLRequestHeader("Content-type","application/octet-stream");  
 			
 			/**设置请求链接和图片文件名称**/  
-			var pngURLRequest:URLRequest = new URLRequest(url + "?name=zuffy.png");  
+			var pngURLRequest:URLRequest = new URLRequest(url);  
 			pngURLRequest.requestHeaders.push(header);  
 			pngURLRequest.method = URLRequestMethod.POST;  
 			pngURLRequest.data = pngStream;  
@@ -94,14 +96,17 @@
 			
 			/**添加数据发送结束的事件处理，服务器返回的数据会放入loader的data属性中**/  
 			loader.addEventListener(Event.COMPLETE,picUploadCompleteHandler); 
+			loader.addEventListener(IOErrorEvent.IO_ERROR,onSaveError);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSaveError);
 		}
 		
 		private function picUploadCompleteHandler(e:Event):void {
 			trace(e.target.data);
+			_uploadRet && _uploadRet(e.target.data);
 		}
 		
-		private function onSaveError(event:IOErrorEvent):void {
-			
+		private function onSaveError(event:Event):void {
+			_uploadRet && _uploadRet({ret:-1});
 		}
 
 		private function onSaveGress(event:ProgressEvent):void {
@@ -111,6 +116,7 @@
 
 		private function onSaveComplete(event:Event):void {
 			trace(event.target.data);
+			_uploadRet && _uploadRet(event.target.data);
 		}
 		
 		public static function getCookies():Array {  

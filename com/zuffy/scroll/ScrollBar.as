@@ -16,7 +16,7 @@
 		private var scrolling_speed:Number;// 0.00 to 1.00
 
 		public function ScrollBar(){
-
+			flash_scroller.buttonMode = true;
 		}
 
 		public function scrolling( ct:Sprite, ct_area:Sprite, speed:Number ):void {
@@ -44,6 +44,9 @@
 
 			if (flash_content.height<=flash_content_area.height) {
 				flash_scroller.visible=flash_scrollable_area.visible=false;
+			}
+			else{
+				flash_scroller.visible=flash_scrollable_area.visible=true;
 			}
 			flash_scroller.addEventListener( MouseEvent.MOUSE_DOWN, scroller_drag );
 			flash_scroller.addEventListener( MouseEvent.MOUSE_UP, scroller_drop );
