@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
+    <!-- 
+    Smart developers always View Source. 
+    
+    This application was built using Adobe Flex, an open source framework
+    for building rich Internet applications that get delivered via the
+    Flash Player or to desktops via Adobe AIR. 
+    
+    Learn more about Flex at http://flex.org 
+    // -->
+    <head>
+        <title></title>
+        <meta name="google" value="notranslate" />         
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
+             the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
+             the percentage of the height of its parent container, which has to be set explicitly.  Fix for
+             Firefox 3.6 focus border issues.  Initially, don't display flashContent div so it won't show 
+             if JavaScript disabled.
+        -->
+        <style type="text/css" media="screen"> 
+            html, body  { height:100%; }
+            body { margin:0; padding:0; overflow:auto; text-align:center; 
+                   background-color: #ffffff; }
+        </style>
+        <script type="text/javascript" src="swfobject.js"></script>
+        <script type="text/javascript">
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            var swfVersionStr = "11.4.0";
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+            var xiSwfUrlStr = "playerProductInstall.swf";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "always";
+            params.allowfullscreen = "true";
+            flashvars.uploadUrl = "http://zuffy.com/upload.php";
+            var attributes = {};
+            attributes.id = "upload";
+            attributes.name = "upload";
+            attributes.align = "left";
+            swfobject.embedSWF(
+                "RankingShare.swf", "rankFlash", 
+                "100%", "100%", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            swfobject.createCSS("#rankFlash", "display:block;text-align:left;");
+
+            swfobject.embedSWF("circle.swf", "greenFlash", "100%", "100%","9.0.0");
+            
+            swfobject.embedSWF("circle.swf", "blueFlash", "40", "40","9.0.0", "expressInstall.swf",{"auto":1,"width":40,"height":40,"angle":360,"color":0x319ae6,"scale":0,"rotation":0,"noLoop":1});
+            swfobject.embedSWF("circle.swf", "oriFlash", "40", "40","9.0.0", "expressInstall.swf",{"auto":1,"width":40,"height":40,"angle":260,"color":0xff7800,"scale":-1,"rotation":-90,"noLoop":0});
+        </script>
+    </head>
+        <body>
+        <div style="width:250px;height:420px">
+            <div id="rankFlash"></div>
+        </div>
+        <script type="text/javascript">
+            function debug(msg){
+                console.log(msg)
+            }
+            /*
+            * 获取 flash 对象;
+            * @movieName : flash输入的name;
+            */
+            function findSWF(movieName) {
+              if (navigator.appName.indexOf("Microsoft")!= -1) {
+                return window[movieName];
+              } else {
+                return document[movieName];
+              }
+            }
+            setTimeout(function(){
+                var swf = findSWF("rankFlash");
+                if(swf && swf.setParam)
+                    swf.setParam({k:"hello"})
+                else{
+                    console.log('wait')
+                }
+            },500)
+        </script>
+    </body>
+</html>
