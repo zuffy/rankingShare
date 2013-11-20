@@ -31,6 +31,11 @@
 
 		private const BOX_WIDTH:uint = 250;
 		private const BOX_HEIGHT:uint = 315;
+		
+		private var snaptShootWdith:Number = 250;
+		private var snaptShootHeight:Number = 315;
+
+
 		private var sharComplete:Function
 
 		public function upload() {
@@ -90,12 +95,16 @@
 		private function setParam(obj:Object):void {
 			ExternalInterface.call('debug','in flash:'+obj.k)
 			var funcName = obj.snapUploadComplete
+
+			// 截图宽高，显示的flash宽高
+			snaptShootWdith = obj.width
+			snaptShootHeight = obj.height
+
 			sharComplete = function __sharComplete(obj):void {
 				ExternalInterface.call('debug','in flash: com func '+ funcName)
-				ExternalInterface.call('' + funcName, obj);
+				ExternalInterface.call('' + funcName, obj)
 			}
 			uploadUrl = obj.uploadUrl
-			picName = obj.picName
 			setData(obj);
 		}
 
@@ -149,7 +158,7 @@
 		private function onSave(me:MouseEvent = null):void {
 			var photoModel:PhotoModel = PhotoModel.instance()
 			photoModel.photo(currentHolder, BOX_WIDTH, 375)
-			photoModel.uploadPic(uploadUrl, picName, sharComplete)
+			photoModel.uploadPic(uploadUrl, sharComplete)
 		}
 		
 

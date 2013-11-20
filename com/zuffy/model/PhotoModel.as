@@ -75,7 +75,7 @@
 			
 		}
 		private var _uploadRet:Function
-		public function uploadPic(url:String, picName:String, callback:Function):void {
+		public function uploadPic(url:String, callback:Function):void {
 			_uploadRet = callback;
 			/**创建图片对应的字节流**/  
 			var pngStream:ByteArray = PNGEncoder.encode(picData_1);  

@@ -39,8 +39,8 @@
             params.allowfullscreen = "true";
             flashvars.uploadUrl = "http://zuffy.com/upload.php";
             var attributes = {};
-            attributes.id = "upload";
-            attributes.name = "upload";
+            attributes.id = "rankFlash";
+            attributes.name = "rankFlash";
             attributes.align = "left";
             swfobject.embedSWF(
                 "RankingShare.swf", "rankFlash", 
@@ -49,17 +49,15 @@
                 flashvars, params, attributes);
             // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
             swfobject.createCSS("#rankFlash", "display:block;text-align:left;");
-
-            swfobject.embedSWF("circle.swf", "greenFlash", "100%", "100%","9.0.0");
-            
-            swfobject.embedSWF("circle.swf", "blueFlash", "40", "40","9.0.0", "expressInstall.swf",{"auto":1,"width":40,"height":40,"angle":360,"color":0x319ae6,"scale":0,"rotation":0,"noLoop":1});
-            swfobject.embedSWF("circle.swf", "oriFlash", "40", "40","9.0.0", "expressInstall.swf",{"auto":1,"width":40,"height":40,"angle":260,"color":0xff7800,"scale":-1,"rotation":-90,"noLoop":0});
         </script>
     </head>
         <body>
         <div style="width:250px;height:420px">
             <div id="rankFlash"></div>
         </div>
+        <div>
+            <p><a id="snapBtn">截屏</a><a>分享</a>
+        <div>
         <script type="text/javascript">
             function debug(msg){
                 console.log(msg)
@@ -74,15 +72,55 @@
               } else {
                 return document[movieName];
               }
+              return document.getElementById(movieName)
             }
             setTimeout(function(){
+                var obj = {};
+                var arr = [];
+                for (var i = 0; i< 50; i++){
+                    arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465'});
+                    if(i==5){
+                        arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465', isMore:true})
+                    }
+                }
+                obj.arr = arr;
+                obj.snapUploadComplete = "sharComplete"
+                obj.uploadUrl = "http://zuffy.com/upload.php"
+                //obj.height
+                obj.width = 315
                 var swf = findSWF("rankFlash");
                 if(swf && swf.setParam)
-                    swf.setParam({k:"hello"})
+                    swf.setParam(obj)
                 else{
                     console.log('wait')
                 }
-            },500)
+            },1000)
+
+            function sharComplete(obj) {
+                console.log(obj);
+                return;
+                var ret = obj.ret;
+                var url = obj.retUrl;
+                if(ret == 0){
+                    alert('ok')
+                }
+                else {
+                    alert('false')
+                }
+            }
+        </script>
+
+        <script type="text/javascript">
+            var btn = document.getElementById('snapBtn');
+            
+            btn.onclick = function() {
+            var swf = findSWF("rankFlash");
+                if(swf && swf.saveSnaptShoot)
+                    swf.saveSnaptShoot()
+                else{
+                    console.log('wait')
+                }
+            }
         </script>
     </body>
 </html>
