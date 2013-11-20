@@ -44,6 +44,9 @@
 			
 			picData_1 = new BitmapData(w,h,true,0);
 			picData_1.draw(p1);
+			var b:Bitmap = new Bitmap(picData_1)
+			b.x = 30
+			p1.addChild(b)
 		}
 		
 		public function save():void {
@@ -75,7 +78,7 @@
 			
 		}
 		private var _uploadRet:Function
-		public function uploadPic(url:String, picName:String, callback:Function):void {
+		public function uploadPic(url:String, callback:Function):void {
 			_uploadRet = callback;
 			/**创建图片对应的字节流**/  
 			var pngStream:ByteArray = PNGEncoder.encode(picData_1);  
