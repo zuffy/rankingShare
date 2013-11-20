@@ -1,25 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
-    <!-- 
-    Smart developers always View Source. 
-    
-    This application was built using Adobe Flex, an open source framework
-    for building rich Internet applications that get delivered via the
-    Flash Player or to desktops via Adobe AIR. 
-    
-    Learn more about Flex at http://flex.org 
-    // -->
     <head>
         <title></title>
         <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
-             the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
-             the percentage of the height of its parent container, which has to be set explicitly.  Fix for
-             Firefox 3.6 focus border issues.  Initially, don't display flashContent div so it won't show 
-             if JavaScript disabled.
-        -->
         <style type="text/css" media="screen"> 
             html, body  { height:100%; }
             body { margin:0; padding:0; overflow:auto; text-align:center; 
@@ -59,68 +43,136 @@
             <p><a id="snapBtn">截屏</a><a>分享</a>
         <div>
         <script type="text/javascript">
-            function debug(msg){
-                console.log(msg)
-            }
-            /*
-            * 获取 flash 对象;
-            * @movieName : flash输入的name;
-            */
-            function findSWF(movieName) {
-              if (navigator.appName.indexOf("Microsoft")!= -1) {
-                return window[movieName];
-              } else {
-                return document[movieName];
-              }
-              return document.getElementById(movieName)
-            }
-            setTimeout(function(){
-                var obj = {};
-                var arr = [];
-                for (var i = 0; i< 50; i++){
-                    arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465'});
-                    if(i==5){
-                        arr.push({id:i, uid:'xxx'+i, rank:'111', uid:'', name:'小样'+i, mark:'12315465', isMore:true})
-                    }
-                }
-                obj.arr = arr;
-                obj.snapUploadComplete = "sharComplete"
-                obj.uploadUrl = "http://zuffy.com/upload.php"
-                //obj.height
-                obj.width = 315
-                var swf = findSWF("rankFlash");
-                if(swf && swf.setParam)
-                    swf.setParam(obj)
-                else{
-                    console.log('wait')
-                }
-            },1000)
 
-            function sharComplete(obj) {
-                console.log(obj);
-                return;
-                var ret = obj.ret;
-                var url = obj.retUrl;
-                if(ret == 0){
-                    alert('ok')
-                }
-                else {
-                    alert('false')
-                }
-            }
-        </script>
+        /**
+         * flash 内部接口, 第一次调用接口前需要判断接口是否可用
+         * -setParam(obj) 设置基本参数
+         *  obj:
+         *    {
+         *      uploadUrl   上传路径
+         *      snapUploadComplete  截图上传后回调函数
+         *      showMoreFunc  显示更多按钮点击回调函数
+         *      logFunc   日志函数
+         *      height    flash提交的截图高度
+         *    }
+         *
+         * -setList(arr) 设置显示列表
+         *  arr:数组
+         *    [{
+         *        id:排名id, 
+         *        uid:用户id(保留不用), 
+         *        name:显示名字, 
+         *        mark:分数
+         *    }];
+         *    
+         *  -saveSnaptShoot() 保存截图
+         *
+         */
 
-        <script type="text/javascript">
-            var btn = document.getElementById('snapBtn');
+
+        /**
+         * 用于flash打印日志
+         * @msg: 日志内容
+         */
+        function debug(msg){
+            console.log(msg)
+        }
+
+        /*
+        * 获取 flash 对象;
+        * @movieName: flash输入的name;
+        */
+        function findSWF(movieName) {
+          if (navigator.appName.indexOf("Microsoft")!= -1) {
+            return window[movieName];
+          } else {
+            return document[movieName];
+          }
+          return document.getElementById(movieName)
+        }
+        
+        /**
+         * swf.saveSnaptShoot 上传图片后的回调函数
+         * @obj ：服务器返回的json格式数据
+         */
+        function sharComplete(obj) {
+            console.log(obj);
+            return;
+            var ret = obj.ret;
+            var url = obj.retUrl;
+            if(ret == 0){
+                alert('ok')
+            }
+            else {
+                alert('false')
+            }
+        }
+
+        /**
+         * 显示更多按钮点击回调函数
+         * @j 返回的按钮在列表中的idex
+         */
+        function showMore(j) {
+            var arr = [];
+            for (var i = 0; i< 20; i++){
+                if(i==10){
+                    arr.push({isMoreBtn:true})
+                }
+                else 
+                    arr.push({id:i, uid:'xxx'+i, name:'test22试试'+i, mark:'12315465'});
+            }
             
-            btn.onclick = function() {
             var swf = findSWF("rankFlash");
-                if(swf && swf.saveSnaptShoot)
-                    swf.saveSnaptShoot()
-                else{
-                    console.log('wait')
-                }
+            // 需轮询监听setParam是否存在
+            if(swf && swf.setList){
+                swf.setList(arr)
             }
+            else{
+                console.log('内部方法未注册完毕')
+            }
+        }
+
+        // test
+        setTimeout(function(){
+            var obj = {};
+            var arr = [];
+            for (var i = 0; i< 50; i++){
+                if(i==5){
+                    arr.push({isMoreBtn:true})
+                }
+                else 
+                    arr.push({id:i, uid:'xxx'+i, name:'test试试11'+i, mark:'12315465'});
+            }
+            obj.uploadUrl = "http://zuffy.com/upload.php"   // 上传路径
+            obj.snapUploadComplete = "sharComplete"         // 截图上传后回调函数
+            obj.showMoreFunc = "showMore"                       // 显示更多按钮点击回调函数
+            obj.logFunc = 'debug'                           // 日志函数
+            //obj.height
+            obj.height = 315                                 // flash提交的截图高度
+            
+            var swf = findSWF("rankFlash");
+            // 需轮询监听setParam是否存在
+            if(swf && swf.setParam){
+                swf.setParam(obj)
+                swf.setList(arr)
+            }
+            else{
+                console.log('内部方法未注册完毕')
+            }
+        },1000)
+
+        // 上传部分
+        var btn = document.getElementById('snapBtn');
+            
+        btn.onclick = function() {
+            var swf = findSWF("rankFlash");
+            if(swf && swf.saveSnaptShoot)
+                swf.saveSnaptShoot()
+            else{
+                console.log('内部方法未注册完毕')
+            }
+        }
+
         </script>
     </body>
 </html>
