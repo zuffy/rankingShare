@@ -44,9 +44,10 @@
 			
 			picData_1 = new BitmapData(w,h,true,0);
 			picData_1.draw(p1);
-			var b:Bitmap = new Bitmap(picData_1)
+			/*var b:Bitmap = new Bitmap(picData_1)
 			b.x = 30
-			p1.addChild(b)
+			b.y = 30
+			p1.stage.addChild(b)*/
 		}
 		
 		public function save():void {

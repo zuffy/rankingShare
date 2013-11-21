@@ -27,6 +27,7 @@
 		private var list_height:Number = 120;
 
 		private var item_padding:Number = 20;
+		private var item_spacing:Number = 10;
 		private var flash_style:StyleSheet;
 		private var moreIndex:int = 5;
 		private var showMoreHandler:String
@@ -56,9 +57,7 @@
 			container.addChild(this)
 			item_width = t_w ? t_w : item_width
 			list_height = t_h ? t_h : list_height;
-			item_padding = t_p ? t_p : 20;
 			showMoreHandler = showMoreFunc;
-			y = 20
 		}
 
 		private function create_content(data:String):void {
@@ -75,49 +74,7 @@
 			fm_text.autoSize = TextFieldAutoSize.LEFT;
 			addChild(fm_text);
 		}
-		private var item_spacing:Number = 10;
-		private function create_first_list(lists:Array):void {
-			var total:int = lists.length;
-			var item_height:Number = 0;
-			var flash_item:Sprite = new Sprite();
-			
-			var i:int = 0, len:int = 0;
-			for( i = 0; i < 5; i++ ) {
-				flash_item = new Sprite();
-				flash_item.addChild( create_pre_icon(i))
-				flash_item.addChild( create_item_text(lists[i].name, 120) );
-				flash_item.addChild( create_item_text(lists[i].mark, 65, 165) );
-				flash_item.y = item_height;
-				item_height += flash_item.height + item_spacing;
-				flash_item_group.addChild( flash_item );
-			}
-			var btn:More = new More();
-			btn.y = item_height;
-			item_height += btn.height + item_spacing;
-			flash_item_group.addChild( btn );
-			btn.addEventListener(MouseEvent.CLICK, function __(me:MouseEvent):void {
-				create_item_list(lists)
-			})
-			for(len = lists.length-1, i = len - 4; i < len; i++ ) {
-				flash_item = new Sprite();
-				flash_item.addChild( create_pre_icon(i))
-				flash_item.addChild( create_item_text(lists[i].name, 120) );
-				flash_item.addChild( create_item_text(lists[i].mark, 65, 165) );
-				flash_item.y = item_height;
-				item_height += flash_item.height + item_spacing;
-				flash_item_group.addChild( flash_item );
-			}
-
-			flash_mask.graphics.beginFill(0xff0000);
-			flash_mask.graphics.drawRect(0,0,item_width,list_height);
-			flash_mask.graphics.endFill();
-			
-
-			flash_sb.x = flash_item_group.x +flash_item_group.width
-			flash_sb.height = flash_mask.height;
-			flash_sb.scrolling(flash_item_group, flash_mask, 0.90);	// ScrollBar Added
-		}
-
+		
 		private function create_item_list(lists:Array):void {
 			var total:int = lists.length;
 			var item_height:Number = 0;
@@ -142,11 +99,11 @@
 					t_item.addChild( create_item_text(lists[i].name, 120) );
 					t_item.addChild( create_item_text(lists[i].mark, 65, 165) );
 				}
-				 
 				t_item.y = item_height;
 				item_height += t_item.height + item_spacing;
 				flash_item_group.addChild( t_item );
 			}
+				ExternalInterface.call('debug',this.y)
 			flash_mask.graphics.clear();
 			flash_mask.graphics.beginFill(0xff0000);
 			flash_mask.graphics.drawRect(0,0,item_width,list_height);
