@@ -118,11 +118,9 @@
 			currentHolder = new Sprite();
 			currentHolderMask = new Sprite();
 			listHolder = new Sprite();
-			var t_title:Title = new Title();
 			currentHolder.addChild(new BG());
-			currentHolder.addChild(t_title);
 			listHolder.x = 5;
-			listHolder.y = t_title.height;
+			listHolder.y = 50;
 			currentHolder.addChild(listHolder);
 			addChild(currentHolder);
 			addChild(currentHolderMask);

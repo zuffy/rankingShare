@@ -9,6 +9,9 @@
 	import flash.geom.Rectangle;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
+	import flash.text.TextFormat;
+	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 
 	public class DataList extends Sprite {
 		
@@ -44,6 +47,7 @@
 		}
 
 		private	var lists:Array;
+		private var tf:TextFormat = new TextFormat("Arial");			
 		public function setData(t_lists:Array, data:String=''):void {
 			flash_sb.visible = true;
 			lists = t_lists
@@ -51,7 +55,8 @@
 			create_item_list(lists)
 
 			flash_style = new StyleSheet()
-			}
+			tf.font = 'bold';
+		}
 
 		public function setup(container:Sprite, showMoreFunc:String, t_w:Number=0, t_h:Number=0, t_p:Number = 0):void {
 			container.addChild(this)
@@ -86,18 +91,20 @@
 			for( var i:int = 0; i < total; i++ ) {
 				var t_item:Sprite = new Sprite();
 				if(lists[i].isMoreBtn){
-					var btn:More = new More();
+					var more:More = new More();
 					var index:int = i;
-					flash_item_group.addChild( btn );
-					btn.addEventListener(MouseEvent.CLICK, function __(me:MouseEvent):void {
+					more.btn.addEventListener(MouseEvent.CLICK, function __(me:MouseEvent):void {
 						if(showMoreHandler)
 						ExternalInterface.call(showMoreHandler, index)
 					})
-					t_item.addChild(btn)
+					if(lists[i].addLine){
+						t_item.addChild(new SeprateLine())
+					}
+					t_item.addChild(more)
 				}else {
-					t_item.addChild( create_pre_icon(i))
-					t_item.addChild( create_item_text(lists[i].name, 120) );
-					t_item.addChild( create_item_text(lists[i].mark, 65, 165) );
+					t_item.addChild( create_pre_icon(lists[i].id))
+					t_item.addChild( create_item_text(lists[i].name, lists[i].color, 125) );
+					t_item.addChild( create_item_text(lists[i].mark, lists[i].color, 75, 125) );
 				}
 				t_item.y = item_height;
 				item_height += t_item.height + item_spacing;
@@ -118,55 +125,66 @@
 			flash_sb.height = flash_mask.height;
 			flash_sb.scrolling(flash_item_group, flash_mask, 0.90);	// ScrollBar Added
 		}
-
-		private function create_pre_icon(index:int):Sprite {
-			var s:Sprite;
-			if(index == 0) {
-				s = new Rank1();
+		
+		private function create_pre_icon(index:int):MovieClip {
+			var s:MovieClip;
+			if(index == 0) {				
+				s = new Icon();
 			}
 			else if(index == 1) {
-				s = new Rank2();
+				s = new Icon();
+				s.gotoAndStop(2)
 			}
 			else if(index == 2) {
-				s = new Rank3();
+				s = new Icon();
+				s.gotoAndStop(3)
 			}
 			else {
-				s = new Sprite();
+				s = new MovieClip();
 				var bg:Shape = new Shape();
 				var tx:TextField = new TextField();
 				tx.text = (index + 1) +'';
-				tx.textColor = 0xcfcfcf;
+				tx.textColor = 0xB8E1FF;
 				tx.autoSize = TextFieldAutoSize.LEFT;
 				tx.selectable = false;
+				tx.setTextFormat(tf);
 				s.addChild(tx)
 				
 				var rect:Rectangle = tx.getCharBoundaries(0);
-				bg.graphics.beginFill(0x11236e);
+				bg.graphics.beginFill(0x0E256B);
 				tx.width = (rect.width)* tx.text.length;
 				tx.height = rect.height;
 				bg.graphics.drawRoundRect(0,0, (rect.width)* tx.text.length + 5, rect.height, 1,1);
 				bg.graphics.endFill();
-				bg.y = 2.5
-				s.x = 5
+				bg.y = -2.5
 				s.addChildAt(bg, 0);			
 			}
+			s.x = 5
+			s.y = 5
 			return s;
 
 		}
-		private function create_item_text(item_desc:String, t_width:Number, padding_left:Number = 60, isMark:Boolean = false ):TextField {
+		private var tf2:TextFormat = new TextFormat();
+		private function create_item_text(item_desc:String, color:uint, t_width:Number, padding_left:Number = 45, isMark:Boolean = false ):TextField {
 			var fm_text:TextField = new TextField();
 			fm_text.x = padding_left;
 			fm_text.y = 0;
 			fm_text.width = t_width;
+			fm_text.height = 25
 			fm_text.text = item_desc;
-			fm_text.textColor = 0xcfcfcf
+			fm_text.textColor = color || 0x9DB7DF;
 			fm_text.multiline = false;
-			fm_text.wordWrap = true;
-			fm_text.selectable = false;
-			if(isMark)
-			fm_text.autoSize = TextFieldAutoSize.RIGHT;
-			else
-			fm_text.autoSize = TextFieldAutoSize.LEFT;
+			//fm_text.wordWrap = true;
+			fm_text.selectable = true;
+			if(isMark){
+				fm_text.border = true;
+				tf2.align = 'right';
+				
+			}
+			else{
+				tf2.align = 'left';
+			}
+			fm_text.defaultTextFormat = tf2;
 			return fm_text;
 		}
 

@@ -62,7 +62,10 @@
          *        id:排名id, 
          *        uid:用户id(保留不用), 
          *        name:显示名字, 
-         *        mark:分数
+         *        mark:分数,
+         *        color: 字体颜色 (默认:0x9DB7DF, 特殊:0xe9c278)
+         *        isMoreBtn:显示更多按钮, 
+         *        addLine:显示分割线
          *    }];
          *    
          *  -saveSnaptShoot() 保存截图
@@ -136,19 +139,24 @@
         setTimeout(function(){
             var obj = {};
             var arr = [];
-            for (var i = 0; i< 50; i++){
+            for (var i = 0; i< 200; i++){
                 if(i==5){
-                    arr.push({isMoreBtn:true})
+                    arr.push({isMoreBtn:true, addLine:true})
                 }
                 else 
-                    arr.push({id:i, uid:'xxx'+i, name:'test试试11'+i, mark:'12315465'});
+                    arr.push({id:i, uid:'xxx'+i, name:'test试试11'+i, mark:'123154分'});
+
+                if(i == 6){
+                    arr[i].color = 0xe9c278;
+                }
             }
-            obj.uploadUrl = "http://zuffy.com/upload.php"   // 上传路径
+            obj.uploadUrl = "http://xunlei.com/upload.php"   // 上传路径
             obj.snapUploadComplete = "sharComplete"         // 截图上传后回调函数
             obj.showMoreFunc = "showMore"                       // 显示更多按钮点击回调函数
             obj.logFunc = 'debug'                           // 日志函数
             //obj.height
-            obj.height = 315                                 // flash提交的截图高度
+            obj.width = 230                                 // flash提交的截图宽度
+            obj.height = 394                                 // flash提交的截图高度
             
             var swf = findSWF("rankFlash");
             // 需轮询监听setParam是否存在
