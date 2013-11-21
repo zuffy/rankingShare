@@ -96,9 +96,13 @@
 			
 			if(!isSetup) {
 				var dh:Number = snaptShootHeight - listHolder.y;
-				DataList.instance.setup(listHolder, showMoreFunc, 250, dh);
+				DataList.instance.setup(listHolder, showMoreFunc, snaptShootWdith, dh);
 				isSetup = true;
 			}
+
+			currentHolderMask.graphics.beginFill(0xff0000);
+			currentHolderMask.graphics.drawRect(0,0,snaptShootWdith,snaptShootHeight);
+			currentHolderMask.graphics.endFill();
 
 		}
 
@@ -114,19 +118,19 @@
 			currentHolder = new Sprite();
 			currentHolderMask = new Sprite();
 			listHolder = new Sprite();
-			var t_title:Title = new Title();
 			currentHolder.addChild(new BG());
-			currentHolder.addChild(t_title);
 			listHolder.x = 5;
-			listHolder.y = t_title.height - 20;
+			listHolder.y = 50;
 			currentHolder.addChild(listHolder);
 			addChild(currentHolder);
+			addChild(currentHolderMask);
+			currentHolder.mask = currentHolderMask
 		}
 
 		private function onSave(me:MouseEvent = null):void {
 			var photoModel:PhotoModel = PhotoModel.instance()
-			photoModel.photo(currentHolder, BOX_WIDTH, snaptShootHeight)
-			//photoModel.uploadPic(uploadUrl, sharComplete)
+			photoModel.photo(currentHolder, snaptShootWdith, snaptShootHeight)
+			photoModel.uploadPic(uploadUrl, sharComplete)
 		}
 
 		private function debug(str:String):void {
