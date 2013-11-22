@@ -39,7 +39,7 @@
 		private var showMoreFunc:String;
 
 		private var sharComplete:Function
-
+		private var bg:BG = new BG()
 		public function upload() {
 			Security.allowDomain("*");  
 			Security.allowInsecureDomain("*");
@@ -86,7 +86,9 @@
 			logFunc = obj.logFunc // 日志输出函数
 			showMoreFunc = obj.showMoreFunc	// 显示更多按钮点击的回调函数
 			uploadUrl = obj.uploadUrl // 上传路径
-
+			if(obj.bg2){
+				bg.gotoAndStop(2)
+			}
 			debug('in flash:'+obj.k)
 
 			sharComplete = function __sharComplete(obj):void {
@@ -118,7 +120,7 @@
 			currentHolder = new Sprite();
 			currentHolderMask = new Sprite();
 			listHolder = new Sprite();
-			currentHolder.addChild(new BG());
+			currentHolder.addChild(bg);
 			listHolder.x = 5;
 			listHolder.y = 50;
 			currentHolder.addChild(listHolder);
