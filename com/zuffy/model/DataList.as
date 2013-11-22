@@ -156,7 +156,7 @@
 				tx.height = rect.height;
 				bg.graphics.drawRoundRect(0,0, (rect.width)* tx.text.length + 5, rect.height, 1,1);
 				bg.graphics.endFill();
-				bg.y = -2.5
+				bg.y = 2.5
 				s.addChildAt(bg, 0);			
 			}
 			s.x = 5
@@ -171,7 +171,7 @@
 			fm_text.y = 0;
 			fm_text.width = t_width;
 			fm_text.height = 25
-			fm_text.text = item_desc;
+			fm_text.text = item_desc || '';
 			fm_text.textColor = color || 0x9DB7DF;
 			fm_text.multiline = false;
 			//fm_text.wordWrap = true;
