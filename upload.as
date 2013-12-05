@@ -27,7 +27,7 @@
 		private var currentHolder:Sprite;
 		private var currentHolderMask:Sprite;
 		private var listHolder:Sprite;
-		private var uploadUrl:String = "http://zuffy.com/upload.php";
+		private var uploadUrl:String = "";
 		private var picName:String = "null.png";
 
 		private const BOX_WIDTH:uint = 250;
@@ -57,20 +57,25 @@
 			}
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
-			stage.tabChildren = false;
-
-			var url:String = stage.loaderInfo.parameters.uploadUrl;
-			uploadUrl = url || uploadUrl;
-			initJS();
+			
+			
+			addEventListener(Event.ENTER_FRAME, checkJS)
 			initUI();
 		}
 
 		private function initJS():void{
+			ExternalInterface.addCallback('setParam', setParam);
+			ExternalInterface.addCallback('setList', setList);
+			ExternalInterface.addCallback('saveSnaptShoot', saveSnaptShoot);
+		}
+
+		private var times:int = 0;
+		private function checkJS(e:Event):void {
 			if (ExternalInterface.available) {
-				ExternalInterface.addCallback('setParam', setParam);
-				ExternalInterface.addCallback('setList', setList);
-				ExternalInterface.addCallback('saveSnaptShoot', saveSnaptShoot);
+				initJS();
+				removeEventListener(Event.ENTER_FRAME, checkJS);
 			}
+			times++;
 		}
 
 		
@@ -122,7 +127,7 @@
 			listHolder = new Sprite();
 			currentHolder.addChild(bg);
 			listHolder.x = 5;
-			listHolder.y = 50;
+			listHolder.y = 55;
 			currentHolder.addChild(listHolder);
 			addChild(currentHolder);
 			addChild(currentHolderMask);

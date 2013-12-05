@@ -104,13 +104,12 @@
 				}else {
 					t_item.addChild( create_pre_icon(lists[i].id))
 					t_item.addChild( create_item_text(lists[i].name, lists[i].color, 125) );
-					t_item.addChild( create_item_text(lists[i].mark, lists[i].color, 75, 125) );
+					t_item.addChild( create_item_text(lists[i].mark, lists[i].color, 75, 125,true) );
 				}
 				t_item.y = item_height;
 				item_height += t_item.height + item_spacing;
 				flash_item_group.addChild( t_item );
 			}
-				ExternalInterface.call('debug',this.y)
 			flash_mask.graphics.clear();
 			flash_mask.graphics.beginFill(0xff0000);
 			flash_mask.graphics.drawRect(0,0,item_width,list_height);
@@ -121,7 +120,7 @@
 			flash_item_group.graphics.drawRect(0,0,item_width-30,item_height);
 			flash_item_group.graphics.endFill();
 			
-			flash_sb.x = flash_item_group.x +flash_item_group.width
+			flash_sb.x = flash_item_group.x +flash_item_group.width + 3
 			flash_sb.height = flash_mask.height;
 			flash_sb.scrolling(flash_item_group, flash_mask, 0.90);	// ScrollBar Added
 		}
@@ -160,31 +159,31 @@
 				s.addChildAt(bg, 0);			
 			}
 			s.x = 5
-			s.y = 5
+			//s.y = 5
 			return s;
 
 		}
 		private var tf2:TextFormat = new TextFormat();
 		private function create_item_text(item_desc:String, color:uint, t_width:Number, padding_left:Number = 45, isMark:Boolean = false ):TextField {
 			var fm_text:TextField = new TextField();
-			fm_text.x = padding_left;
-			fm_text.y = 0;
-			fm_text.width = t_width;
-			fm_text.height = 25
-			fm_text.text = item_desc || '';
-			fm_text.textColor = color || 0x9DB7DF;
-			fm_text.multiline = false;
-			//fm_text.wordWrap = true;
-			fm_text.selectable = true;
 			if(isMark){
-				fm_text.border = true;
-				tf2.align = 'right';
-				
+				//fm_text.border = true;
+				tf2.align = 'right';				
 			}
 			else{
 				tf2.align = 'left';
 			}
 			fm_text.defaultTextFormat = tf2;
+			fm_text.x = padding_left;
+			fm_text.y = 0;
+			fm_text.width = t_width;
+			fm_text.height = 23.5
+			fm_text.text = item_desc || '';
+			fm_text.textColor = color || 0x9DB7DF;
+			fm_text.multiline = false;
+			//fm_text.wordWrap = true;
+			fm_text.selectable = false;
+			
 			return fm_text;
 		}
 

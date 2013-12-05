@@ -12,7 +12,7 @@
         <script type="text/javascript" src="swfobject.js"></script>
         <script type="text/javascript">
             // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
-            var swfVersionStr = "11.4.0";
+            var swfVersionStr = "9";
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "playerProductInstall.swf";
             var flashvars = {};
@@ -54,7 +54,6 @@
          *      showMoreFunc  显示更多按钮点击回调函数
          *      logFunc   日志函数
          *      height    flash提交的截图高度
-         *      (boolean)bg2 背景图2
          *    }
          *
          * -setList(arr) 设置显示列表
@@ -79,7 +78,8 @@
          * @msg: 日志内容
          */
         function debug(msg){
-            console.log(msg)
+            //console.log(msg)
+            alert(msg)
         }
 
         /*
@@ -87,6 +87,7 @@
         * @movieName: flash输入的name;
         */
         function findSWF(movieName) {
+          return window[movieName] || document[movieName];
           if (navigator.appName.indexOf("Microsoft")!= -1) {
             return window[movieName];
           } else {
@@ -100,7 +101,7 @@
          * @obj ：服务器返回的json格式数据
          */
         function sharComplete(obj) {
-            console.log(obj);
+            debug(obj);
             return;
             var ret = obj.ret;
             var url = obj.retUrl;
@@ -132,15 +133,15 @@
                 swf.setList(arr)
             }
             else{
-                console.log('内部方法未注册完毕')
+                debug('内部方法未注册完毕')
             }
         }
 
         // test
-        setTimeout(function(){
+        var callback = (function(){
             var obj = {};
             var arr = [];
-            for (var i = 0; i< 200; i++){
+            for (var i = 0; i< 9; i++){
                 if(i==5){
                     arr.push({isMoreBtn:true, addLine:true})
                 }
@@ -166,9 +167,28 @@
                 swf.setList(arr)
             }
             else{
-                console.log('内部方法未注册完毕')
+                debug('内部方法未注册完毕')
             }
-        },1000)
+        })
+
+        
+        var i=0
+        function checkflash(name, callback) {
+            var func = function(){
+                var t_func = arguments.callee;
+                var swf = findSWF("rankFlash");
+                // 需轮询监听setParam是否存在
+                //debug(''+swf)
+                if(swf && swf.setParam){
+                    callback()
+                }
+                else{  
+                    setTimeout(t_func, 1000)
+                }
+            }
+            func();
+        }
+        checkflash('rankFlash', callback)
 
         // 上传部分
         var btn = document.getElementById('snapBtn');
@@ -178,7 +198,7 @@
             if(swf && swf.saveSnaptShoot)
                 swf.saveSnaptShoot()
             else{
-                console.log('内部方法未注册完毕')
+                debug('内部方法未注册完毕')
             }
         }
 

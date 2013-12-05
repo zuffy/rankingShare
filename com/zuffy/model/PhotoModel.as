@@ -110,7 +110,7 @@
 		}
 		
 		private function onSaveError(event:Event):void {
-			_uploadRet && _uploadRet({ret:-1});
+			_uploadRet && _uploadRet({ret:-201});
 		}
 
 		private function onSaveGress(event:ProgressEvent):void {

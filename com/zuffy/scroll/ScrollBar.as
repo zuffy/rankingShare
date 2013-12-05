@@ -50,7 +50,7 @@
 			}
 			flash_scroller.addEventListener( MouseEvent.MOUSE_DOWN, scroller_drag );
 			flash_scroller.addEventListener( MouseEvent.MOUSE_UP, scroller_drop );
-			flash_content.addEventListener( MouseEvent.MOUSE_WHEEL, scroller_wheel );
+			//flash_content.addEventListener( MouseEvent.MOUSE_WHEEL, scroller_wheel );
 			this.addEventListener( Event.ENTER_FRAME, on_scroll );
 		}
 
